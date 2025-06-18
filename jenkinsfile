@@ -1,0 +1,35 @@
+pipeline{
+    agent any
+    tools{
+        maven 'mymaven'
+    }
+ stages
+    {
+        stage('TEST CODE')
+        {
+            steps
+            {
+                script{
+                    int maxRetries = 3
+                    int retry=0
+                    bol success=false
+                    while(retry<=maxRetries && !success)
+                    {
+                        try{            //the code that may fail 
+                            sh 'mvn test'
+                            success=true
+                        }
+                        catch(Exception e){
+                            retry++
+                            sleep(10)    // sleep for 10 seconds
+                        }
+                    if(!success){
+                        error("all the attempts fail")
+                    }
+
+
+                    }   //while loop
+                }
+        }   }
+    }   
+}
